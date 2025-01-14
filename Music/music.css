@@ -1,0 +1,46 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1db954, #121212);
+    color: #fff;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .music-player {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.6);
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .track-details {
+    margin-bottom: 20px;
+  }
+  
+  .control-btn {
+    background-color: #1db954;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .control-btn:hover {
+    background-color: #1ed760;
+  }
+  
+  .control-btn:active {
+    background-color: #14833b;
+  }
+  
