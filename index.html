@@ -5,36 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spotify Clone</title>
     <style>
-        /* Default styles for desktop */
-        .Home {
-            display: flex;
-            flex-wrap: wrap; /* Ensures items adjust on smaller screens */
-            justify-content: center;
-            gap: 20px;
-        }
-
         .Home-header {
-            width: 200px; /* Fixed width for desktop */
-            text-align: center;
+            margin: 10px 20px;
+            padding-bottom: 20px;
             border: 2px solid rgb(169, 168, 168);
             border-radius: 10px;
+            text-align: center;
             padding: 10px;
         }
-
+        .Home {
+            display: flex;
+        }
         .Home .Home-header img {
             border-radius: 10px 10px 0 0;
-            width: 100%;
-            height: auto;
+            width: 150px;
+            height: 150px;
         }
-
-        /* Controls */
         .controls {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-top: 10px;
         }
-
         .control-btn {
             padding: 10px;
             background-color: #1db954;
@@ -49,27 +41,8 @@
             align-items: center;
             justify-content: center;
         }
-
         .control-btn:hover {
             background-color: #17a747;
-        }
-
-        /* ✅ Responsive Design for Mobile */
-        @media (max-width: 768px) {
-            .Home {
-                flex-direction: column; /* Stack songs vertically */
-                align-items: center;
-            }
-
-            .Home-header {
-                width: 90%; /* Full width on smaller screens */
-            }
-
-            .control-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 20px;
-            }
         }
     </style>
 </head>
@@ -83,58 +56,55 @@
                 name: "Chinnataname",
                 artist: "S.P.Balasubramaniam",
                 img: "Images/download.jpeg",
-                src: "Music/Chinnataname.mp3"
+                src: "Music/Chinnataname - SenSongsMp3.Co.mp3"
             },
             {
                 id: 2,
                 name: "Pichonne Ayipoy",
                 artist: "S.P.Balasubramaniam",
                 img: "Images/Winner-2017jpeg.jpg",
-                src: "Music/Pichonne_Ayipoya.mp3"
+                src: "Music/Pichonne Ayipoya - SenSongsMp3.Co.mp3"
             },
             {
                 id: 3,
                 name: "Chandrullo Undey",
                 artist: "S.P.Balasubramaniam",
                 img: "Images/Nuvvostanante-Nenoddantana-jpeg.jpg",
-                src: "Music/Chandrullo_Unde_Kundelu.mp3"
+                src: "Music/04 - Chandrullo Unde Kundelu  - SenSongsMp3.co.mp3"
             }
         ];
 
         let currentAudio = null;
         let currentButton = null;
-        let currentSongIndex = 0; // Track the current song index
 
-        function renderSongs() {
-            let aud = "";
-            Music.forEach((element, index) => {
-                aud += `
-                    <div class="Home-header">
-                        <img src="${element.img}" alt="${element.name}">
-                        <p><strong>${element.name}</strong></p>
-                        <p>${element.artist}</p>
-                        <div class="controls">
-                            <audio id="audio-${index}">
-                                <source src="${element.src}" type="audio/mpeg">
-                            </audio>
-                            <button class="control-btn" onclick="prevSong(${index})">⏮</button>
-                            <button class="control-btn play-btn" onclick="togglePlay(this, ${index})">▶</button>
-                            <button class="control-btn" onclick="nextSong(${index})">⏭</button>
-                        </div>
+        let aud = "";
+        Music.forEach((element) => {
+            aud += `
+                <div class="Home-header">
+                    <img src="${element.img}" alt="${element.name}">
+                    <div class="controls">
+                        <audio id="${element.name}">
+                            <source src="${element.src}" type="audio/mpeg">
+                        </audio>
+                        <button class="control-btn">⏮</button>
+                        <button class="control-btn play-btn" onclick="togglePlay(this, '${element.name}')">▶</button>
+                        <button class="control-btn">⏭</button>
                     </div>
-                `;
-            });
-            document.querySelector(".Home").innerHTML = aud;
-        }
+                </div>
+            `;
+        });
 
-        function togglePlay(button, index) {
-            let audio = document.getElementById(`audio-${index}`);
+        document.querySelector(".Home").innerHTML = aud;
 
-            // Stop the currently playing song if a new one is clicked
+        function togglePlay(button, audioId) {
+            let audio = document.getElementById(audioId);
+
+            // Stop the currently playing audio if different from the new one
             if (currentAudio && currentAudio !== audio) {
+              console.log(audio);
                 currentAudio.pause();
                 if (currentButton) {
-                    currentButton.innerText = "▶"; // Reset previous button
+                    currentButton.innerText = "▶"; // Reset previous play button
                 }
             }
 
@@ -144,7 +114,6 @@
                 button.innerText = "⏸";
                 currentAudio = audio; // Store current playing audio
                 currentButton = button;
-                currentSongIndex = index; // Update current song index
             } else {
                 audio.pause();
                 button.innerText = "▶";
@@ -152,27 +121,6 @@
                 currentButton = null;
             }
         }
-
-        function prevSong(index) {
-            if (index > 0) {
-                let prevIndex = index - 1;
-                playSongByIndex(prevIndex);
-            }
-        }
-
-        function nextSong(index) {
-            if (index < Music.length - 1) {
-                let nextIndex = index + 1;
-                playSongByIndex(nextIndex);
-            }
-        }
-
-        function playSongByIndex(index) {
-            let newButton = document.querySelectorAll(".play-btn")[index];
-            togglePlay(newButton, index);
-        }
-
-        renderSongs(); // Render the songs on page load
     </script>
 </body>
 </html>
