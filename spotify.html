@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Clone</title>
+    <style>
+        /* Default styles for desktop */
+        .Home {
+            display: flex;
+            flex-wrap: wrap; /* Ensures items adjust on smaller screens */
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .Home-header {
+            width: 200px; /* Fixed width for desktop */
+            text-align: center;
+            border: 2px solid rgb(169, 168, 168);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .Home .Home-header img {
+            border-radius: 10px 10px 0 0;
+            width: 100%;
+            height: auto;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .control-btn {
+            padding: 10px;
+            background-color: #1db954;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            background-color: #17a747;
+        }
+
+        /* ✅ Responsive Design for Mobile */
+        @media (max-width: 768px) {
+            .Home {
+                flex-direction: column; /* Stack songs vertically */
+                align-items: center;
+            }
+
+            .Home-header {
+                width: 90%; /* Full width on smaller screens */
+            }
+
+            .control-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="Home"></div>
+
+    <script>
+        const Music = [
+            {
+                id: 1,
+                name: "Chinnataname",
+                artist: "S.P.Balasubramaniam",
+                img: "Images/download.jpeg",
+                src: "Music/Chinnataname.mp3"
+            },
+            {
+                id: 2,
+                name: "Pichonne Ayipoy",
+                artist: "S.P.Balasubramaniam",
+                img: "Images/Winner-2017jpeg.jpg",
+                src: "Music/Pichonne_Ayipoya.mp3"
+            },
+            {
+                id: 3,
+                name: "Chandrullo Undey",
+                artist: "S.P.Balasubramaniam",
+                img: "Images/Nuvvostanante-Nenoddantana-jpeg.jpg",
+                src: "Music/Chandrullo_Unde_Kundelu.mp3"
+            }
+        ];
+
+        let currentAudio = null;
+        let currentButton = null;
+        let currentSongIndex = 0; // Track the current song index
+
+        function renderSongs() {
+            let aud = "";
+            Music.forEach((element, index) => {
+                aud += `
+                    <div class="Home-header">
+                        <img src="${element.img}" alt="${element.name}">
+                        <p><strong>${element.name}</strong></p>
+                        <p>${element.artist}</p>
+                        <div class="controls">
+                            <audio id="audio-${index}">
+                                <source src="${element.src}" type="audio/mpeg">
+                            </audio>
+                            <button class="control-btn" onclick="prevSong(${index})">⏮</button>
+                            <button class="control-btn play-btn" onclick="togglePlay(this, ${index})">▶</button>
+                            <button class="control-btn" onclick="nextSong(${index})">⏭</button>
+                        </div>
+                    </div>
+                `;
+            });
+            document.querySelector(".Home").innerHTML = aud;
+        }
+
+        function togglePlay(button, index) {
+            let audio = document.getElementById(`audio-${index}`);
+
+            // Stop the currently playing song if a new one is clicked
+            if (currentAudio && currentAudio !== audio) {
+                currentAudio.pause();
+                if (currentButton) {
+                    currentButton.innerText = "▶"; // Reset previous button
+                }
+            }
+
+            // Toggle play/pause for the selected song
+            if (audio.paused) {
+                audio.play();
+                button.innerText = "⏸";
+                currentAudio = audio; // Store current playing audio
+                currentButton = button;
+                currentSongIndex = index; // Update current song index
+            } else {
+                audio.pause();
+                button.innerText = "▶";
+                currentAudio = null;
+                currentButton = null;
+            }
+        }
+
+        function prevSong(index) {
+            if (index > 0) {
+                let prevIndex = index - 1;
+                playSongByIndex(prevIndex);
+            }
+        }
+
+        function nextSong(index) {
+            if (index < Music.length - 1) {
+                let nextIndex = index + 1;
+                playSongByIndex(nextIndex);
+            }
+        }
+
+        function playSongByIndex(index) {
+            let newButton = document.querySelectorAll(".play-btn")[index];
+            togglePlay(newButton, index);
+        }
+
+        renderSongs(); // Render the songs on page load
+    </script>
+</body>
+</html>
